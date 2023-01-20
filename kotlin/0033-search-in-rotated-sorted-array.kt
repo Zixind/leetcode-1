@@ -1,27 +1,32 @@
+package kotlin
+
 class Solution {
+    fun search(nums: IntArray, target: Int): Int {
+        var l = 0
+        var r = nums.size - 1
 
-	fun search(nums: IntArray, target: Int): Int {
-		if (nums.isEmpty()) {
-			return -1
-		}
-		return separate(nums, target, 0, nums.size - 1)
-	}
+        while(l <= r){
+            val m = l + (r - l) / 2
 
-	fun separate(nums: IntArray, target: Int, from: Int, end: Int): Int {
-		var index = (end - from) / 2 + from
-		if (nums[index] == target) {
-			return index
-		}
-		if (from == end) {
-			return -1
-		}
+            if(nums[m] == target) return m
 
-		val curIndex = if (nums[index] > nums[0] && nums[index] > target  && nums[0] <= target
-				||  nums[index] < nums[0] && (target < nums[index]  || target >= nums[0])) {
-			separate(nums, target, from, index)
-		} else {
-			separate(nums, target, index + 1, end)
-		}
-		return curIndex
-	}
+            //left sorted portion
+            if(nums[l] <= nums[m]){
+                if(target > nums[m] || target < nums[l]){
+                    l = m + 1
+                } else {
+                    r = m - 1
+                }
+            } else {
+                // right sorted portion
+                if(target < nums[m] || target > nums[r]){
+                    r = m - 1
+                } else {
+                    l = m + 1
+                }
+            }
+        }
+
+        return - 1
+    }
 }
